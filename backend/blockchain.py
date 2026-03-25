@@ -10,6 +10,11 @@ RPC_URL = os.getenv("HARDHAT_RPC", "http://127.0.0.1:8545")
 CONTRACT_ADDRESS = os.getenv("CONTRACT_ADDRESS")
 PRIVATE_KEY = os.getenv("PRIVATE_KEY")
 
+if not CONTRACT_ADDRESS:
+    raise RuntimeError("CONTRACT_ADDRESS is not set. Copy it from deploy output to backend/.env")
+if not PRIVATE_KEY:
+    raise RuntimeError("PRIVATE_KEY is not set. Copy Account #0 private key to backend/.env")
+
 w3 = Web3(Web3.HTTPProvider(RPC_URL))
 
 ABI_PATH = Path(__file__).parent.parent / "artifacts/contracts/EmployeeAuth.sol/EmployeeAuth.json"
@@ -35,7 +40,10 @@ def _send_tx(fn):
     })
     signed = w3.eth.account.sign_transaction(tx, PRIVATE_KEY)
     tx_hash = w3.eth.send_raw_transaction(signed.raw_transaction)
-    return w3.eth.wait_for_transaction_receipt(tx_hash)
+    receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+    if receipt.status == 0:
+        raise RuntimeError(f"Transaction reverted on-chain: {tx_hash.hex()}")
+    return receipt
 
 
 def is_employee(address: str) -> bool:
