@@ -1,5 +1,6 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
+const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 
 describe("EmployeeAuth", function () {
   let contract, owner, addr1, addr2;
@@ -62,7 +63,8 @@ describe("EmployeeAuth", function () {
   it("logLogin records a login event and emits LoginRecorded", async () => {
     await contract.addEmployee(addr1.address, "Alice");
     await expect(contract.logLogin(addr1.address))
-      .to.emit(contract, "LoginRecorded");
+      .to.emit(contract, "LoginRecorded")
+      .withArgs(addr1.address, anyValue);
     const log = await contract.getLoginHistory();
     expect(log.length).to.equal(1);
     expect(log[0].employee).to.equal(addr1.address);
@@ -85,6 +87,7 @@ describe("EmployeeAuth", function () {
     await contract.addEmployee(addr1.address, "Alice");
     await contract.addEmployee(addr2.address, "Bob");
     const list = await contract.getEmployeeList();
+    expect(list.length).to.equal(2);
     expect(list).to.include(addr1.address);
     expect(list).to.include(addr2.address);
   });
