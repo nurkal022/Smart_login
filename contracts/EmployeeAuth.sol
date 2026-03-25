@@ -7,7 +7,11 @@ contract EmployeeAuth {
         uint256 timestamp;
     }
 
-    address public owner;
+    event EmployeeAdded(address indexed addr, string name);
+    event EmployeeRemoved(address indexed addr);
+    event LoginRecorded(address indexed addr, uint256 timestamp);
+
+    address public immutable owner;
     mapping(address => string) private employeeNames;
     address[] private employeeList;
     LoginEvent[] private loginLog;
@@ -25,11 +29,11 @@ contract EmployeeAuth {
         require(bytes(employeeNames[_addr]).length == 0, "Already exists");
         employeeNames[_addr] = _name;
         employeeList.push(_addr);
+        emit EmployeeAdded(_addr, _name);
     }
 
     function removeEmployee(address _addr) external onlyOwner {
         require(bytes(employeeNames[_addr]).length > 0, "Not found");
-        delete employeeNames[_addr];
         for (uint i = 0; i < employeeList.length; i++) {
             if (employeeList[i] == _addr) {
                 employeeList[i] = employeeList[employeeList.length - 1];
@@ -37,6 +41,8 @@ contract EmployeeAuth {
                 break;
             }
         }
+        delete employeeNames[_addr];
+        emit EmployeeRemoved(_addr);
     }
 
     function isEmployee(address _addr) external view returns (bool) {
@@ -48,7 +54,9 @@ contract EmployeeAuth {
     }
 
     function logLogin(address _addr) external onlyOwner {
+        require(bytes(employeeNames[_addr]).length > 0, "Not an employee");
         loginLog.push(LoginEvent(_addr, block.timestamp));
+        emit LoginRecorded(_addr, block.timestamp);
     }
 
     function getLoginHistory() external view returns (LoginEvent[] memory) {
