@@ -2,6 +2,7 @@ node_modules/
 artifacts/
 cache/
 backend/venv/
+venv/
 backend/.env
 __pycache__/
 *.pyc
