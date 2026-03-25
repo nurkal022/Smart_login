@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Product — NovaCorp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">Nova<span>Corp</span></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="product.html" class="active">Product</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html" class="btn-portal">Employee Portal</a>
+    </nav>
+  </header>
+
+  <section class="hero" style="padding:60px 5%">
+    <h1 style="font-size:2.2rem">NovaCorp Auth Platform</h1>
+    <p>Enterprise authentication powered by Ethereum. No passwords. No breaches. Full auditability.</p>
+    <a href="login.html" class="btn btn-primary">Try the Portal</a>
+  </section>
+
+  <section class="section">
+    <div class="text-center">
+      <div class="section-title">Platform Features</div>
+      <p class="section-subtitle">Everything you need to secure your workforce — nothing you don't.</p>
+    </div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">🦊</div>
+        <h3>MetaMask Authentication</h3>
+        <p>Employees sign in with a single click using their MetaMask wallet. No username, no password — just a cryptographic signature.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">⛓️</div>
+        <h3>On-Chain Employee Registry</h3>
+        <p>Your employee list lives on the Ethereum blockchain. Additions and removals are permanent, transparent, and owner-controlled.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📋</div>
+        <h3>Immutable Audit Log</h3>
+        <p>Every login event is recorded on-chain with a timestamp. No central server can modify or delete the audit trail.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">👑</div>
+        <h3>Admin Control Panel</h3>
+        <p>Admins can add or revoke employee access instantly. Changes take effect on the next login attempt.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔑</div>
+        <h3>JWT Session Management</h3>
+        <p>After blockchain verification, sessions are managed with short-lived JWTs — enterprise-standard and stateless.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏠</div>
+        <h3>Self-Hosted Friendly</h3>
+        <p>Deploy on your own infrastructure with a local Ethereum node. No dependency on third-party auth providers.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:#e8eaf6;border-radius:12px;margin:0 5%;padding:4rem 5%">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center">
+      <div>
+        <div class="section-title">How It Works</div>
+        <ol style="padding-left:1.5rem;color:#444;line-height:2.2">
+          <li>Employee opens the portal and clicks <strong>"Login with MetaMask"</strong></li>
+          <li>The system generates a unique <strong>one-time nonce</strong></li>
+          <li>Employee <strong>signs the nonce</strong> with their private key</li>
+          <li>Backend <strong>recovers the address</strong> from the signature</li>
+          <li>Smart contract confirms the address is a <strong>registered employee</strong></li>
+          <li>Login is <strong>recorded on-chain</strong> and a session token is issued</li>
+        </ol>
+      </div>
+      <div class="card" style="background:#fff">
+        <div class="card-icon">🔒</div>
+        <h3>Security Model</h3>
+        <p>The private key never leaves the employee's device. The server never sees a password. Even if the backend is fully compromised, there are no credentials to steal.</p>
+        <br>
+        <p style="color:#1976d2;font-size:0.9rem;font-weight:600">Backed by Ethereum cryptography (secp256k1 ECDSA)</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section text-center">
+    <div class="section-title">Simple, Transparent Pricing</div>
+    <p class="section-subtitle">One plan. Everything included.</p>
+    <div style="display:inline-block;background:#fff;border-radius:12px;padding:2.5rem 3rem;box-shadow:var(--shadow);border:2px solid #1976d2">
+      <div style="font-size:3rem;font-weight:800;color:#1a237e">$0</div>
+      <div style="color:#666;margin-bottom:1rem">for local / self-hosted deployment</div>
+      <ul style="text-align:left;color:#444;line-height:2">
+        <li>✅ Unlimited employees</li>
+        <li>✅ Full audit log</li>
+        <li>✅ Admin panel</li>
+        <li>✅ Open source smart contract</li>
+        <li>✅ No vendor lock-in</li>
+      </ul>
+      <br>
+      <a href="contact.html" class="btn btn-primary">Contact for Enterprise Support</a>
+    </div>
+  </section>
+
+  <footer>
+    <strong>Nova<span style="color:#90caf9">Corp</span></strong> &nbsp;|&nbsp;
+    <a href="index.html" style="color:rgba(255,255,255,0.6);margin:0 0.5rem">Home</a>
+    <a href="about.html" style="color:rgba(255,255,255,0.6);margin:0 0.5rem">About</a>
+    <a href="product.html" style="color:rgba(255,255,255,0.6);margin:0 0.5rem">Product</a>
+    <a href="contact.html" style="color:rgba(255,255,255,0.6);margin:0 0.5rem">Contact</a>
+    <br><br>
+    <span>© 2026 NovaCorp. All rights reserved.</span>
+  </footer>
+</body>
+</html>

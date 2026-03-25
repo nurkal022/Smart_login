@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — NovaCorp Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="app-navbar">
+    <div class="logo">Nova<span>Corp</span> Portal</div>
+    <div class="user-info">
+      <span id="userName">Admin</span>
+      <span class="badge-admin">Admin</span>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="app-content">
+    <div class="page-title">Admin Panel</div>
+
+    <div class="stats-strip">
+      <div class="stat-box"><div class="num" id="statEmployees">—</div><div class="lbl">Employees</div></div>
+      <div class="stat-box"><div class="num" id="statLogins">—</div><div class="lbl">Total Logins</div></div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('employees', this)">Employees</button>
+      <button class="tab-btn" onclick="switchTab('audit', this)">Audit Log</button>
+    </div>
+
+    <!-- Employees Tab -->
+    <div class="tab-content active" id="tab-employees">
+      <div class="add-form">
+        <h3>Add New Employee</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="newName" placeholder="Asel Nurova">
+          </div>
+          <div class="form-group">
+            <label>Wallet Address (0x...)</label>
+            <input type="text" id="newAddress" placeholder="0xAbc...">
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="addEmployee()">Add Employee</button>
+        </div>
+        <div class="status-msg" id="addStatus"></div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Registered Employees</h3>
+          <button class="btn btn-outline btn-sm" onclick="loadEmployees()">Refresh</button>
+        </div>
+        <table>
+          <thead>
+            <tr><th>#</th><th>Name</th><th>Wallet Address</th><th>Action</th></tr>
+          </thead>
+          <tbody id="employeeTable">
+            <tr><td colspan="4" style="text-align:center;color:#aaa;padding:2rem">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Audit Tab -->
+    <div class="tab-content" id="tab-audit">
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Login Audit Log (Blockchain)</h3>
+          <button class="btn btn-outline btn-sm" onclick="loadAudit()">Refresh</button>
+        </div>
+        <table>
+          <thead>
+            <tr><th>#</th><th>Date & Time</th><th>Wallet Address</th></tr>
+          </thead>
+          <tbody id="auditTable">
+            <tr><td colspan="3" style="text-align:center;color:#aaa;padding:2rem">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:8000';
+    const token = localStorage.getItem('token');
+    const isAdmin = localStorage.getItem('is_admin') === 'true';
+
+    if (!token || !isAdmin) window.location.href = 'login.html';
+
+    function authHeaders() {
+      return { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+    }
+
+    async function apiFetch(path, opts = {}) {
+      const res = await fetch(API + path, { headers: authHeaders(), ...opts });
+      if (res.status === 401) { logout(); return null; }
+      return res.json();
+    }
+
+    function formatDate(ts) {
+      return new Date(ts * 1000).toLocaleString('en-GB', {
+        day: '2-digit', month: 'short', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+      });
+    }
+
+    function shortAddr(addr) {
+      return `<span title="${addr}" class="address-cell">${addr.slice(0,6)}...${addr.slice(-4)}</span>`;
+    }
+
+    function switchTab(name, btn) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`tab-${name}`).classList.add('active');
+      btn.classList.add('active');
+      if (name === 'audit') loadAudit();
+    }
+
+    async function loadEmployees() {
+      const employees = await apiFetch('/admin/employees');
+      if (!employees) return;
+      document.getElementById('statEmployees').textContent = employees.length;
+
+      const tbody = document.getElementById('employeeTable');
+      if (employees.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#aaa;padding:2rem">No employees yet</td></tr>';
+        return;
+      }
+      tbody.innerHTML = employees.map((e, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td><strong>${e.name}</strong></td>
+          <td>${shortAddr(e.address)}</td>
+          <td><button class="btn btn-danger" onclick="removeEmployee('${e.address}', '${e.name}')">Remove</button></td>
+        </tr>
+      `).join('');
+    }
+
+    async function addEmployee() {
+      const name = document.getElementById('newName').value.trim();
+      const address = document.getElementById('newAddress').value.trim();
+      const statusEl = document.getElementById('addStatus');
+
+      if (!name || !address) {
+        statusEl.textContent = 'Please fill in both fields.';
+        statusEl.className = 'status-msg error';
+        return;
+      }
+
+      statusEl.textContent = 'Adding employee on blockchain...';
+      statusEl.className = 'status-msg info';
+
+      const res = await fetch(`${API}/admin/employees`, {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ address, name })
+      });
+
+      if (res.ok) {
+        statusEl.textContent = `✅ ${name} added successfully.`;
+        statusEl.className = 'status-msg success';
+        document.getElementById('newName').value = '';
+        document.getElementById('newAddress').value = '';
+        loadEmployees();
+      } else {
+        const err = await res.json();
+        statusEl.textContent = `Error: ${err.detail}`;
+        statusEl.className = 'status-msg error';
+      }
+    }
+
+    async function removeEmployee(address, name) {
+      if (!confirm(`Remove ${name} from the employee registry?`)) return;
+      await fetch(`${API}/admin/employees/${address}`, {
+        method: 'DELETE', headers: authHeaders()
+      });
+      loadEmployees();
+    }
+
+    async function loadAudit() {
+      const data = await apiFetch('/admin/audit');
+      if (!data) return;
+      const events = data.events;
+      document.getElementById('statLogins').textContent = events.length;
+
+      const tbody = document.getElementById('auditTable');
+      if (events.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#aaa;padding:2rem">No login events yet</td></tr>';
+        return;
+      }
+      tbody.innerHTML = [...events].reverse().map((e, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${formatDate(e.timestamp)}</td>
+          <td>${shortAddr(e.employee)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'login.html';
+    }
+
+    // Initial load
+    loadEmployees();
+    apiFetch('/admin/audit').then(data => {
+      if (data) document.getElementById('statLogins').textContent = data.events.length;
+    });
+  </script>
+</body>
+</html>

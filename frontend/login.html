@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Portal — NovaCorp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="login-page">
+    <div class="login-card">
+      <div class="logo-big">Nova<span>Corp</span></div>
+      <p class="subtitle">Employee Portal — Secure Access</p>
+
+      <button class="metamask-btn" id="loginBtn" onclick="loginWithMetaMask()">
+        <span>🦊</span> Sign in with MetaMask
+      </button>
+
+      <div class="status-msg" id="statusMsg"></div>
+
+      <p style="margin-top:2rem;font-size:0.8rem;color:#aaa">
+        🔒 Secured by Ethereum blockchain
+      </p>
+      <p style="margin-top:0.5rem">
+        <a href="index.html" style="font-size:0.85rem;color:#1976d2">← Back to website</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
+  <script>
+    const API = 'http://localhost:8000';
+
+    function setStatus(msg, type) {
+      const el = document.getElementById('statusMsg');
+      el.textContent = msg;
+      el.className = `status-msg ${type}`;
+    }
+
+    async function loginWithMetaMask() {
+      const btn = document.getElementById('loginBtn');
+      btn.disabled = true;
+      setStatus('Connecting to MetaMask...', 'info');
+
+      try {
+        if (!window.ethereum) {
+          setStatus('MetaMask not found. Please install the MetaMask browser extension.', 'error');
+          btn.disabled = false;
+          return;
+        }
+
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send('eth_requestAccounts', []);
+        const signer = provider.getSigner();
+        const address = await signer.getAddress();
+
+        setStatus('Requesting authentication nonce...', 'info');
+
+        // Step 1: Get nonce
+        const nonceRes = await fetch(`${API}/auth/nonce`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ address })
+        });
+        const { nonce } = await nonceRes.json();
+
+        setStatus('Please sign the message in MetaMask...', 'info');
+
+        // Step 2: Sign nonce
+        const signature = await signer.signMessage(`Sign this nonce to login: ${nonce}`);
+
+        setStatus('Verifying on blockchain...', 'info');
+
+        // Step 3: Verify
+        const verifyRes = await fetch(`${API}/auth/verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ address, signature })
+        });
+
+        if (!verifyRes.ok) {
+          const err = await verifyRes.json();
+          setStatus(`Access denied: ${err.detail}`, 'error');
+          btn.disabled = false;
+          return;
+        }
+
+        const { access_token, is_admin } = await verifyRes.json();
+        localStorage.setItem('token', access_token);
+        localStorage.setItem('address', address);
+        localStorage.setItem('is_admin', is_admin);
+
+        setStatus('Login successful! Redirecting...', 'success');
+
+        setTimeout(() => {
+          window.location.href = is_admin ? 'admin.html' : 'dashboard.html';
+        }, 1000);
+
+      } catch (err) {
+        if (err.code === 4001) {
+          setStatus('Signature rejected. Please try again.', 'error');
+        } else {
+          setStatus(`Error: ${err.message}`, 'error');
+        }
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>

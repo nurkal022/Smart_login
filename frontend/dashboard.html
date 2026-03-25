@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — NovaCorp Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="app-navbar">
+    <div class="logo">Nova<span>Corp</span> Portal</div>
+    <div class="user-info">
+      <span id="userName">Loading...</span>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="app-content">
+    <div class="page-title">My Dashboard</div>
+
+    <div class="info-grid" id="infoGrid">
+      <div class="info-card">
+        <div class="label">Full Name</div>
+        <div class="value" id="empName">—</div>
+      </div>
+      <div class="info-card">
+        <div class="label">Wallet Address</div>
+        <div class="value address-cell" id="empAddress">—</div>
+      </div>
+      <div class="info-card">
+        <div class="label">Last Login</div>
+        <div class="value" id="lastLogin">—</div>
+      </div>
+      <div class="info-card">
+        <div class="label">Total Logins</div>
+        <div class="value" id="totalLogins">—</div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-header">
+        <h3>Login History (last 10)</h3>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date & Time</th>
+            <th>Wallet Address</th>
+          </tr>
+        </thead>
+        <tbody id="historyTable">
+          <tr><td colspan="3" style="text-align:center;color:#aaa;padding:2rem">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:8000';
+    const token = localStorage.getItem('token');
+
+    if (!token) window.location.href = 'login.html';
+
+    async function apiFetch(path) {
+      const res = await fetch(API + path, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.status === 401) { logout(); return null; }
+      return res.json();
+    }
+
+    function formatDate(ts) {
+      return new Date(ts * 1000).toLocaleString('en-GB', {
+        day: '2-digit', month: 'short', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+    }
+
+    function shortAddr(addr) {
+      return addr.slice(0, 6) + '...' + addr.slice(-4);
+    }
+
+    async function loadDashboard() {
+      const me = await apiFetch('/me');
+      if (!me) return;
+
+      document.getElementById('userName').textContent = me.name;
+      document.getElementById('empName').textContent = me.name;
+      document.getElementById('empAddress').textContent = me.address;
+
+      const history = await apiFetch('/me/history');
+      if (!history) return;
+
+      const events = history.events;
+      document.getElementById('totalLogins').textContent = events.length;
+
+      if (events.length > 0) {
+        const last = events[events.length - 1];
+        document.getElementById('lastLogin').textContent = formatDate(last.timestamp);
+      }
+
+      const tbody = document.getElementById('historyTable');
+      if (events.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#aaa;padding:2rem">No history yet</td></tr>';
+        return;
+      }
+
+      // Show last 10 entries (most recent first)
+      const last10 = [...events].reverse().slice(0, 10);
+      tbody.innerHTML = last10.map((e, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${formatDate(e.timestamp)}</td>
+          <td class="address-cell" title="${e.employee}">${shortAddr(e.employee)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'login.html';
+    }
+
+    loadDashboard();
+  </script>
+</body>
+</html>
