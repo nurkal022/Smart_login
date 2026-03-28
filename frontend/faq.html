@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ — NovaCorp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .faq-list { max-width: 800px; margin: 0 auto; }
+    .faq-item { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 1rem; overflow: hidden; }
+    .faq-question { padding: 1.25rem 1.5rem; font-weight: 600; color: var(--primary); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
+    .faq-question:hover { background: #f5f7fa; }
+    .faq-question::after { content: '+'; font-size: 1.4rem; color: var(--accent); transition: transform 0.3s; }
+    .faq-item.open .faq-question::after { content: '−'; }
+    .faq-answer { padding: 0 1.5rem; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; color: #444; line-height: 1.8; font-size: 0.95rem; }
+    .faq-item.open .faq-answer { max-height: 500px; padding: 0 1.5rem 1.5rem; }
+    .faq-category { font-size: 1.3rem; font-weight: 700; color: var(--primary); margin: 2.5rem 0 1rem; padding-left: 0.5rem; border-left: 4px solid var(--accent); padding-left: 1rem; }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">Nova<span>Corp</span></div>
+    <nav>
+      <a href="index.html">Главная</a>
+      <a href="about.html">О нас</a>
+      <a href="product.html">Продукт</a>
+      <a href="contact.html">Контакты</a>
+      <a href="login.html" class="btn-portal">Портал сотрудников</a>
+    </nav>
+  </header>
+
+  <section class="hero" style="padding:60px 5%">
+    <h1 style="font-size:2.2rem">Часто задаваемые вопросы</h1>
+    <p>Ответы на основные вопросы о платформе, блокчейне и безопасности.</p>
+  </section>
+
+  <section class="section">
+    <div class="faq-list">
+
+      <div class="faq-category">Общие вопросы</div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Что такое NovaCorp?</div>
+        <div class="faq-answer">NovaCorp — это корпоративная платформа аутентификации, основанная на технологии блокчейн. Вместо традиционных паролей сотрудники входят в систему с помощью криптографического кошелька MetaMask, а все события аутентификации записываются в блокчейн Ethereum.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Зачем использовать блокчейн для аутентификации?</div>
+        <div class="faq-answer">Блокчейн обеспечивает неизменяемость данных. Все записи о входах в систему невозможно удалить, подделать или изменить задним числом. Это гарантирует полную прозрачность и аудируемость действий — ключевое требование для корпоративной безопасности.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Нужно ли платить за использование системы?</div>
+        <div class="faq-answer">Для локального и самостоятельного развёртывания платформа полностью бесплатна. Смарт-контракт имеет открытый исходный код. При работе в приватной сети Ethereum транзакционные комиссии минимальны или отсутствуют.</div>
+      </div>
+
+      <div class="faq-category">MetaMask и кошельки</div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Что такое MetaMask?</div>
+        <div class="faq-answer">MetaMask — это расширение для браузера, которое служит криптографическим кошельком. Оно позволяет безопасно хранить приватные ключи и подписывать транзакции, не раскрывая ключ серверу или сторонним приложениям. MetaMask поддерживается в Chrome, Firefox, Brave и Edge.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Нужны ли настоящие деньги (ETH) для входа?</div>
+        <div class="faq-answer">Нет. Сотрудники только подписывают сообщение — это бесплатная операция, не требующая ETH. Транзакции в блокчейн (запись входа, добавление сотрудников) выполняются бэкендом от имени администратора. В локальной сети Hardhat все транзакции бесплатны.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Как установить MetaMask?</div>
+        <div class="faq-answer">Перейдите в магазин расширений вашего браузера (Chrome Web Store, Firefox Add-ons), найдите «MetaMask» и установите. После установки создайте новый кошелёк, задайте пароль и сохраните seed-фразу в надёжном месте. Затем администратор добавит адрес вашего кошелька в систему.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Что делать, если я потерял доступ к MetaMask?</div>
+        <div class="faq-answer">Если вы сохранили seed-фразу при создании кошелька, вы можете восстановить его на любом устройстве. Если seed-фраза утеряна, администратор может удалить старый адрес и зарегистрировать новый кошелёк сотрудника.</div>
+      </div>
+
+      <div class="faq-category">Безопасность</div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Передаётся ли мой приватный ключ на сервер?</div>
+        <div class="faq-answer">Нет, никогда. Приватный ключ хранится исключительно в MetaMask на вашем устройстве. Сервер отправляет одноразовый код (nonce), вы подписываете его локально, и на сервер отправляется только подпись. Сервер восстанавливает ваш публичный адрес из подписи — этого достаточно для верификации.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Что произойдёт при компрометации бэкенда?</div>
+        <div class="faq-answer">Даже при полном взломе сервера злоумышленник не получит паролей (их нет) и приватных ключей (они на устройствах пользователей). Журнал аудита в блокчейне останется нетронутым. Максимум, что может сделать атакующий — выдать поддельные JWT-токены, но они станут невалидными после смены JWT_SECRET.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Как защищена система от повторной отправки подписи (replay attack)?</div>
+        <div class="faq-answer">Каждый раз при входе сервер генерирует уникальный одноразовый nonce. После использования nonce немедленно удаляется. Даже если злоумышленник перехватит подпись, он не сможет использовать её повторно — nonce уже истёк.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Кто может добавлять и удалять сотрудников?</div>
+        <div class="faq-answer">Только владелец смарт-контракта (owner) — это администратор системы. Все функции добавления и удаления сотрудников защищены модификатором <code>onlyOwner</code> на уровне смарт-контракта. Даже при компрометации бэкенда без приватного ключа администратора изменить реестр невозможно.</div>
+      </div>
+
+      <div class="faq-category">Технические вопросы</div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Какой блокчейн используется?</div>
+        <div class="faq-answer">Платформа работает на Ethereum-совместимых сетях. Для разработки и демонстрации используется локальная сеть Hardhat (Chain ID 31337). В продуктивной среде можно использовать Ethereum mainnet, тестовые сети (Sepolia, Goerli) или приватные корпоративные сети.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Какие технологии используются?</div>
+        <div class="faq-answer">Смарт-контракт написан на Solidity 0.8.24 и развёрнут с помощью Hardhat. Бэкенд — Python (FastAPI) с библиотекой web3.py для взаимодействия с блокчейном. Фронтенд — чистый HTML/CSS/JavaScript с библиотекой ethers.js для подключения к MetaMask.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Как долго хранятся данные в блокчейне?</div>
+        <div class="faq-answer">Данные в блокчейне хранятся бессрочно. Каждая запись о входе сотрудника существует в блокчейне навсегда и может быть проверена в любой момент. Это принципиальное отличие от традиционных баз данных, где логи могут быть удалены или изменены.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section text-center">
+    <div class="section-title">Остались вопросы?</div>
+    <p class="section-subtitle">Свяжитесь с нами — мы с радостью ответим.</p>
+    <a href="contact.html" class="btn btn-primary">Связаться с нами</a>
+  </section>
+
+  <footer>
+    <strong>Nova<span style="color:#90caf9">Corp</span></strong> &nbsp;|&nbsp;
+    <a href="index.html" style="color:rgba(255,255,255,0.6);margin:0 0.5rem">Главная</a>
+    <a href="about.html" style="color:rgba(255,255,255,0.6);margin:0 0.5rem">О нас</a>
+    <a href="product.html" style="color:rgba(255,255,255,0.6);margin:0 0.5rem">Продукт</a>
+    <a href="contact.html" style="color:rgba(255,255,255,0.6);margin:0 0.5rem">Контакты</a>
+    <br><br>
+    <span>© 2026 NovaCorp. Все права защищены.</span>
+  </footer>
+
+  <script>
+    function toggleFaq(el) {
+      const item = el.parentElement;
+      item.classList.toggle('open');
+    }
+  </script>
+</body>
+</html>

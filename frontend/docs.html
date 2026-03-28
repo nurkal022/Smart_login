@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Документация — NovaCorp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .docs-layout { display: grid; grid-template-columns: 240px 1fr; gap: 2rem; max-width: 1100px; margin: 0 auto; }
+    .docs-sidebar { position: sticky; top: 80px; align-self: start; }
+    .docs-sidebar a { display: block; padding: 8px 16px; color: var(--text-muted); font-size: 0.9rem; border-left: 3px solid transparent; transition: all 0.2s; margin-bottom: 2px; border-radius: 0 4px 4px 0; }
+    .docs-sidebar a:hover, .docs-sidebar a.active { color: var(--accent); border-left-color: var(--accent); background: var(--accent-light); }
+    .docs-sidebar .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); font-weight: 700; padding: 8px 16px; margin-top: 1rem; }
+    .docs-content h2 { font-size: 1.5rem; color: var(--primary); margin: 2.5rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); }
+    .docs-content h2:first-child { margin-top: 0; }
+    .docs-content h3 { font-size: 1.1rem; color: var(--primary); margin: 1.5rem 0 0.75rem; }
+    .docs-content p { color: #444; line-height: 1.8; margin-bottom: 1rem; }
+    .docs-content ul, .docs-content ol { color: #444; line-height: 2; margin-bottom: 1rem; padding-left: 1.5rem; }
+    .code-block { background: #1a1a2e; color: #e0e0e0; padding: 1.25rem 1.5rem; border-radius: var(--radius); font-family: 'Courier New', monospace; font-size: 0.85rem; overflow-x: auto; margin-bottom: 1.5rem; line-height: 1.7; }
+    .code-block .comment { color: #6a9955; }
+    .code-block .cmd { color: #dcdcaa; }
+    .code-block .val { color: #ce9178; }
+    .step-card { background: var(--white); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 1rem; border-left: 4px solid var(--accent); }
+    .step-card .step-num { color: var(--accent); font-weight: 800; font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .note-box { background: #fff3e0; border-left: 4px solid #ff9800; padding: 1rem 1.25rem; border-radius: 0 var(--radius) var(--radius) 0; margin-bottom: 1.5rem; font-size: 0.9rem; color: #444; }
+    .note-box strong { color: #e65100; }
+    @media (max-width: 768px) { .docs-layout { grid-template-columns: 1fr; } .docs-sidebar { display: none; } }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">Nova<span>Corp</span></div>
+    <nav>
+      <a href="index.html">Главная</a>
+      <a href="about.html">О нас</a>
+      <a href="product.html">Продукт</a>
+      <a href="contact.html">Контакты</a>
+      <a href="login.html" class="btn-portal">Портал сотрудников</a>
+    </nav>
+  </header>
+
+  <section class="hero" style="padding:60px 5%">
+    <h1 style="font-size:2.2rem">Документация</h1>
+    <p>Руководство по установке, настройке и использованию платформы NovaCorp.</p>
+  </section>
+
+  <section class="section">
+    <div class="docs-layout">
+
+      <aside class="docs-sidebar">
+        <div class="sidebar-title">Начало работы</div>
+        <a href="#requirements" class="active">Требования</a>
+        <a href="#install">Установка</a>
+        <a href="#deploy">Развёртывание контракта</a>
+        <a href="#run">Запуск системы</a>
+        <div class="sidebar-title">Использование</div>
+        <a href="#metamask">Настройка MetaMask</a>
+        <a href="#login">Вход в систему</a>
+        <a href="#admin">Панель администратора</a>
+        <div class="sidebar-title">Архитектура</div>
+        <a href="#arch">Обзор архитектуры</a>
+        <a href="#contract">Смарт-контракт</a>
+        <a href="#api">API-эндпоинты</a>
+      </aside>
+
+      <div class="docs-content">
+
+        <h2 id="requirements">Системные требования</h2>
+        <ul>
+          <li><strong>Node.js</strong> v18+ и npm</li>
+          <li><strong>Python</strong> 3.10+</li>
+          <li><strong>MetaMask</strong> — расширение для браузера</li>
+          <li><strong>Браузер</strong> — Chrome, Firefox, Brave или Edge</li>
+        </ul>
+
+        <h2 id="install">Установка</h2>
+
+        <div class="step-card">
+          <div class="step-num">Шаг 1. Клонирование репозитория</div>
+          <div class="code-block">
+            <span class="cmd">git clone</span> &lt;repo-url&gt;<br>
+            <span class="cmd">cd</span> cripto
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">Шаг 2. Установка зависимостей Node.js</div>
+          <div class="code-block">
+            <span class="cmd">npm install</span>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">Шаг 3. Настройка Python-окружения</div>
+          <div class="code-block">
+            <span class="cmd">cd</span> backend<br>
+            <span class="cmd">python3 -m venv</span> venv<br>
+            <span class="cmd">source</span> venv/bin/activate<br>
+            <span class="cmd">pip install</span> -r requirements.txt
+          </div>
+        </div>
+
+        <h2 id="deploy">Развёртывание смарт-контракта</h2>
+
+        <div class="step-card">
+          <div class="step-num">Шаг 1. Запуск локальной сети</div>
+          <div class="code-block">
+            <span class="cmd">npx hardhat node</span><br>
+            <span class="comment"># Сеть будет доступна на http://127.0.0.1:8545</span><br>
+            <span class="comment"># Chain ID: 31337</span>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">Шаг 2. Деплой контракта</div>
+          <div class="code-block">
+            <span class="cmd">npx hardhat run</span> scripts/deploy.js <span class="cmd">--network</span> localhost
+          </div>
+          <p>Скопируйте адрес контракта из вывода — он понадобится для файла <code>.env</code>.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">Шаг 3. Создание .env</div>
+          <p>Создайте файл <code>backend/.env</code>:</p>
+          <div class="code-block">
+            CONTRACT_ADDRESS=<span class="val">0x5FbDB...aa3</span><br>
+            PRIVATE_KEY=<span class="val">0xac0974bec...2ff80</span><br>
+            JWT_SECRET=<span class="val">ваш_секретный_ключ_32_символа</span><br>
+            HARDHAT_RPC=<span class="val">http://127.0.0.1:8545</span>
+          </div>
+        </div>
+
+        <div class="note-box">
+          <strong>Важно:</strong> PRIVATE_KEY — это приватный ключ аккаунта-владельца контракта (Account #0 в Hardhat). Этот ключ используется бэкендом для записи событий в блокчейн.
+        </div>
+
+        <h2 id="run">Запуск системы</h2>
+        <p>Необходимо запустить три компонента:</p>
+        <div class="code-block">
+          <span class="comment"># Терминал 1 — блокчейн</span><br>
+          <span class="cmd">npx hardhat node</span><br><br>
+          <span class="comment"># Терминал 2 — бэкенд</span><br>
+          <span class="cmd">cd</span> backend && <span class="cmd">source</span> venv/bin/activate<br>
+          <span class="cmd">source</span> .env && <span class="cmd">uvicorn</span> main:app --port 8001<br><br>
+          <span class="comment"># Терминал 3 — фронтенд</span><br>
+          <span class="cmd">cd</span> frontend && <span class="cmd">python3 -m http.server</span> 5500
+        </div>
+
+        <h2 id="metamask">Настройка MetaMask</h2>
+        <ol>
+          <li>Установите расширение MetaMask из магазина вашего браузера</li>
+          <li>Создайте новый кошелёк или импортируйте существующий</li>
+          <li>Добавьте сеть вручную: <strong>RPC URL:</strong> http://127.0.0.1:8545, <strong>Chain ID:</strong> 31337</li>
+          <li>Для тестирования импортируйте Account #0 Hardhat по приватному ключу</li>
+        </ol>
+
+        <h2 id="login">Процесс входа</h2>
+        <ol>
+          <li>Откройте <code>http://localhost:5500/login.html</code></li>
+          <li>Нажмите <strong>«Войти через MetaMask»</strong></li>
+          <li>MetaMask запросит подключение — подтвердите</li>
+          <li>Подпишите сообщение с одноразовым кодом (nonce)</li>
+          <li>Система проверит подпись и запишет вход в блокчейн</li>
+          <li>Вы будете перенаправлены в личный кабинет</li>
+        </ol>
+
+        <h2 id="admin">Панель администратора</h2>
+        <p>Доступна только для владельца контракта. Возможности:</p>
+        <ul>
+          <li><strong>Добавление сотрудника</strong> — укажите имя и адрес кошелька (0x...)</li>
+          <li><strong>Удаление сотрудника</strong> — мгновенное отключение доступа</li>
+          <li><strong>Журнал аудита</strong> — все входы из блокчейна с временными метками</li>
+        </ul>
+        <div class="note-box">
+          <strong>Важно:</strong> Все операции по добавлению и удалению сотрудников являются блокчейн-транзакциями. Они неизменны и видны всем участникам сети.
+        </div>
+
+        <h2 id="arch">Обзор архитектуры</h2>
+        <div class="code-block" style="text-align:center;font-size:0.9rem;">
+┌─────────────────┐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;┌──────────────────┐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;┌──────────────────┐<br>
+│&nbsp;&nbsp;Браузер&nbsp;+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│────▶│&nbsp;&nbsp;FastAPI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│────▶│&nbsp;&nbsp;Ethereum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+│&nbsp;&nbsp;MetaMask&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│◀────│&nbsp;&nbsp;(Python)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│◀────│&nbsp;&nbsp;(Hardhat)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+│&nbsp;&nbsp;:5500&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;:8001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;:8545&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+└─────────────────┘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└──────────────────┘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└──────────────────┘<br>
+&nbsp;&nbsp;&nbsp;Фронтенд&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Бэкенд&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Смарт-контракт
+        </div>
+
+        <h2 id="contract">Смарт-контракт</h2>
+        <p>Контракт <strong>EmployeeAuth.sol</strong> написан на Solidity 0.8.24 и содержит:</p>
+        <ul>
+          <li><code>addEmployee(address, name)</code> — регистрация сотрудника (onlyOwner)</li>
+          <li><code>removeEmployee(address)</code> — удаление сотрудника (onlyOwner)</li>
+          <li><code>isEmployee(address)</code> — проверка статуса (view)</li>
+          <li><code>logLogin(address)</code> — запись входа (onlyOwner)</li>
+          <li><code>getLoginHistory()</code> — получение журнала (view)</li>
+          <li><code>getEmployeeList()</code> — список адресов (view)</li>
+        </ul>
+        <p>Все мутации защищены модификатором <code>onlyOwner</code> и генерируют события (events) для off-chain мониторинга.</p>
+
+        <h2 id="api">API-эндпоинты</h2>
+        <div style="overflow-x:auto">
+          <table style="width:100%">
+            <thead>
+              <tr><th>Метод</th><th>Путь</th><th>Описание</th><th>Доступ</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>POST</td><td>/auth/nonce</td><td>Получение одноразового кода</td><td>Публичный</td></tr>
+              <tr><td>POST</td><td>/auth/verify</td><td>Верификация подписи и вход</td><td>Публичный</td></tr>
+              <tr><td>POST</td><td>/auth/logout</td><td>Выход из системы</td><td>Авторизованный</td></tr>
+              <tr><td>GET</td><td>/me</td><td>Данные текущего пользователя</td><td>Авторизованный</td></tr>
+              <tr><td>GET</td><td>/me/history</td><td>История входов пользователя</td><td>Авторизованный</td></tr>
+              <tr><td>GET</td><td>/admin/employees</td><td>Список сотрудников</td><td>Администратор</td></tr>
+              <tr><td>POST</td><td>/admin/employees</td><td>Добавление сотрудника</td><td>Администратор</td></tr>
+              <tr><td>DELETE</td><td>/admin/employees/{addr}</td><td>Удаление сотрудника</td><td>Администратор</td></tr>
+              <tr><td>GET</td><td>/admin/audit</td><td>Полный журнал аудита</td><td>Администратор</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <strong>Nova<span style="color:#90caf9">Corp</span></strong> &nbsp;|&nbsp;
+    <a href="index.html" style="color:rgba(255,255,255,0.6);margin:0 0.5rem">Главная</a>
+    <a href="about.html" style="color:rgba(255,255,255,0.6);margin:0 0.5rem">О нас</a>
+    <a href="product.html" style="color:rgba(255,255,255,0.6);margin:0 0.5rem">Продукт</a>
+    <a href="contact.html" style="color:rgba(255,255,255,0.6);margin:0 0.5rem">Контакты</a>
+    <br><br>
+    <span>© 2026 NovaCorp. Все права защищены.</span>
+  </footer>
+</body>
+</html>

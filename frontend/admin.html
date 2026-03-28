@@ -1,82 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel — NovaCorp Portal</title>
+  <title>Панель администратора — NovaCorp</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header class="app-navbar">
-    <div class="logo">Nova<span>Corp</span> Portal</div>
+    <div class="logo">Nova<span>Corp</span> Портал</div>
     <div class="user-info">
-      <span id="userName">Admin</span>
-      <span class="badge-admin">Admin</span>
-      <button class="btn-logout" onclick="logout()">Logout</button>
+      <span id="userName">Администратор</span>
+      <span class="badge-admin">Админ</span>
+      <button class="btn-logout" onclick="logout()">Выйти</button>
     </div>
   </header>
 
   <div class="app-content">
-    <div class="page-title">Admin Panel</div>
+    <div class="page-title">Панель администратора</div>
 
     <div class="stats-strip">
-      <div class="stat-box"><div class="num" id="statEmployees">—</div><div class="lbl">Employees</div></div>
-      <div class="stat-box"><div class="num" id="statLogins">—</div><div class="lbl">Total Logins</div></div>
+      <div class="stat-box"><div class="num" id="statEmployees">—</div><div class="lbl">Сотрудники</div></div>
+      <div class="stat-box"><div class="num" id="statLogins">—</div><div class="lbl">Всего входов</div></div>
     </div>
 
     <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('employees', this)">Employees</button>
-      <button class="tab-btn" onclick="switchTab('audit', this)">Audit Log</button>
+      <button class="tab-btn active" onclick="switchTab('employees', this)">Сотрудники</button>
+      <button class="tab-btn" onclick="switchTab('audit', this)">Журнал аудита</button>
     </div>
 
-    <!-- Employees Tab -->
+    <!-- Вкладка "Сотрудники" -->
     <div class="tab-content active" id="tab-employees">
       <div class="add-form">
-        <h3>Add New Employee</h3>
+        <h3>Добавить нового сотрудника</h3>
         <div class="form-row">
           <div class="form-group">
-            <label>Full Name</label>
-            <input type="text" id="newName" placeholder="Asel Nurova">
+            <label>Полное имя</label>
+            <input type="text" id="newName" placeholder="Асель Нурова">
           </div>
           <div class="form-group">
-            <label>Wallet Address (0x...)</label>
+            <label>Адрес кошелька (0x...)</label>
             <input type="text" id="newAddress" placeholder="0xAbc...">
           </div>
-          <button class="btn btn-primary btn-sm" onclick="addEmployee()">Add Employee</button>
+          <button class="btn btn-primary btn-sm" onclick="addEmployee()">Добавить</button>
         </div>
         <div class="status-msg" id="addStatus"></div>
       </div>
 
       <div class="table-card">
         <div class="table-header">
-          <h3>Registered Employees</h3>
-          <button class="btn btn-outline btn-sm" onclick="loadEmployees()">Refresh</button>
+          <h3>Зарегистрированные сотрудники</h3>
+          <button class="btn btn-outline btn-sm" onclick="loadEmployees()">Обновить</button>
         </div>
         <table>
           <thead>
-            <tr><th>#</th><th>Name</th><th>Wallet Address</th><th>Action</th></tr>
+            <tr><th>#</th><th>Имя</th><th>Адрес кошелька</th><th>Действие</th></tr>
           </thead>
           <tbody id="employeeTable">
-            <tr><td colspan="4" style="text-align:center;color:#aaa;padding:2rem">Loading...</td></tr>
+            <tr><td colspan="4" style="text-align:center;color:#aaa;padding:2rem">Загрузка...</td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- Audit Tab -->
+    <!-- Вкладка "Аудит" -->
     <div class="tab-content" id="tab-audit">
       <div class="table-card">
         <div class="table-header">
-          <h3>Login Audit Log (Blockchain)</h3>
-          <button class="btn btn-outline btn-sm" onclick="loadAudit()">Refresh</button>
+          <h3>Журнал аудита входов (Блокчейн)</h3>
+          <button class="btn btn-outline btn-sm" onclick="loadAudit()">Обновить</button>
         </div>
         <table>
           <thead>
-            <tr><th>#</th><th>Date & Time</th><th>Wallet Address</th></tr>
+            <tr><th>#</th><th>Дата и время</th><th>Адрес кошелька</th></tr>
           </thead>
           <tbody id="auditTable">
-            <tr><td colspan="3" style="text-align:center;color:#aaa;padding:2rem">Loading...</td></tr>
+            <tr><td colspan="3" style="text-align:center;color:#aaa;padding:2rem">Загрузка...</td></tr>
           </tbody>
         </table>
       </div>
@@ -84,7 +84,7 @@
   </div>
 
   <script>
-    const API = 'http://localhost:8000';
+    const API = 'http://localhost:8001';
     const token = localStorage.getItem('token');
     const isAdmin = localStorage.getItem('is_admin') === 'true';
 
@@ -126,7 +126,7 @@
 
       const tbody = document.getElementById('employeeTable');
       if (employees.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#aaa;padding:2rem">No employees yet</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#aaa;padding:2rem">Сотрудники ещё не добавлены</td></tr>';
         return;
       }
       tbody.innerHTML = employees.map((e, i) => `
@@ -134,7 +134,7 @@
           <td>${i + 1}</td>
           <td><strong>${e.name}</strong></td>
           <td>${shortAddr(e.address)}</td>
-          <td><button class="btn btn-danger" onclick="removeEmployee('${e.address}', '${e.name}')">Remove</button></td>
+          <td><button class="btn btn-danger" onclick="removeEmployee('${e.address}', '${e.name}')">Удалить</button></td>
         </tr>
       `).join('');
     }
@@ -145,12 +145,12 @@
       const statusEl = document.getElementById('addStatus');
 
       if (!name || !address) {
-        statusEl.textContent = 'Please fill in both fields.';
+        statusEl.textContent = 'Пожалуйста, заполните оба поля.';
         statusEl.className = 'status-msg error';
         return;
       }
 
-      statusEl.textContent = 'Adding employee on blockchain...';
+      statusEl.textContent = 'Добавление сотрудника в блокчейн...';
       statusEl.className = 'status-msg info';
 
       const res = await fetch(`${API}/admin/employees`, {
@@ -160,20 +160,20 @@
       });
 
       if (res.ok) {
-        statusEl.textContent = `✅ ${name} added successfully.`;
+        statusEl.textContent = `✅ ${name} успешно добавлен(а).`;
         statusEl.className = 'status-msg success';
         document.getElementById('newName').value = '';
         document.getElementById('newAddress').value = '';
         loadEmployees();
       } else {
         const err = await res.json();
-        statusEl.textContent = `Error: ${err.detail}`;
+        statusEl.textContent = `Ошибка: ${err.detail}`;
         statusEl.className = 'status-msg error';
       }
     }
 
     async function removeEmployee(address, name) {
-      if (!confirm(`Remove ${name} from the employee registry?`)) return;
+      if (!confirm(`Удалить ${name} из реестра сотрудников?`)) return;
       await fetch(`${API}/admin/employees/${address}`, {
         method: 'DELETE', headers: authHeaders()
       });
@@ -188,7 +188,7 @@
 
       const tbody = document.getElementById('auditTable');
       if (events.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#aaa;padding:2rem">No login events yet</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#aaa;padding:2rem">События входа отсутствуют</td></tr>';
         return;
       }
       tbody.innerHTML = [...events].reverse().map((e, i) => `

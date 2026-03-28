@@ -1,64 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard — NovaCorp Portal</title>
+  <title>Личный кабинет — NovaCorp</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header class="app-navbar">
-    <div class="logo">Nova<span>Corp</span> Portal</div>
+    <div class="logo">Nova<span>Corp</span> Портал</div>
     <div class="user-info">
-      <span id="userName">Loading...</span>
-      <button class="btn-logout" onclick="logout()">Logout</button>
+      <span id="userName">Загрузка...</span>
+      <button class="btn-logout" onclick="logout()">Выйти</button>
     </div>
   </header>
 
   <div class="app-content">
-    <div class="page-title">My Dashboard</div>
+    <div class="page-title">Личный кабинет</div>
 
     <div class="info-grid" id="infoGrid">
       <div class="info-card">
-        <div class="label">Full Name</div>
+        <div class="label">Полное имя</div>
         <div class="value" id="empName">—</div>
       </div>
       <div class="info-card">
-        <div class="label">Wallet Address</div>
+        <div class="label">Адрес кошелька</div>
         <div class="value address-cell" id="empAddress">—</div>
       </div>
       <div class="info-card">
-        <div class="label">Last Login</div>
+        <div class="label">Последний вход</div>
         <div class="value" id="lastLogin">—</div>
       </div>
       <div class="info-card">
-        <div class="label">Total Logins</div>
+        <div class="label">Всего входов</div>
         <div class="value" id="totalLogins">—</div>
       </div>
     </div>
 
     <div class="table-card">
       <div class="table-header">
-        <h3>Login History (last 10)</h3>
+        <h3>История входов (последние 10)</h3>
       </div>
       <table>
         <thead>
           <tr>
             <th>#</th>
-            <th>Date & Time</th>
-            <th>Wallet Address</th>
+            <th>Дата и время</th>
+            <th>Адрес кошелька</th>
           </tr>
         </thead>
         <tbody id="historyTable">
-          <tr><td colspan="3" style="text-align:center;color:#aaa;padding:2rem">Loading...</td></tr>
+          <tr><td colspan="3" style="text-align:center;color:#aaa;padding:2rem">Загрузка...</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
   <script>
-    const API = 'http://localhost:8000';
+    const API = 'http://localhost:8001';
     const token = localStorage.getItem('token');
 
     if (!token) window.location.href = 'login.html';
@@ -103,7 +103,7 @@
 
       const tbody = document.getElementById('historyTable');
       if (events.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#aaa;padding:2rem">No history yet</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#aaa;padding:2rem">История входов отсутствует</td></tr>';
         return;
       }
 
