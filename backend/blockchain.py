@@ -39,7 +39,8 @@ def _send_tx(fn):
         "gasPrice": w3.eth.gas_price,
     })
     signed = w3.eth.account.sign_transaction(tx, PRIVATE_KEY)
-    tx_hash = w3.eth.send_raw_transaction(signed.rawTransaction)
+    raw = signed.raw_transaction if hasattr(signed, 'raw_transaction') else signed.rawTransaction
+    tx_hash = w3.eth.send_raw_transaction(raw)
     receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
     if receipt.status == 0:
         raise RuntimeError(f"Transaction reverted on-chain: {tx_hash.hex()}")
