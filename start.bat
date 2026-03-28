@@ -68,8 +68,8 @@ set PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff
 set JWT_SECRET=novacorp_diploma_2026_super_secret_key_32ch
 set HARDHAT_RPC=http://127.0.0.1:8545
 
-start "Frontend" cmd /c "cd frontend && python -m http.server 5500"
-start "Backend" cmd /c "cd backend && ..\venv\Scripts\activate && set CONTRACT_ADDRESS=0x5FbDB2315678afecb367f032d93F642f64180aa3 && set PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 && set JWT_SECRET=novacorp_diploma_2026_super_secret_key_32ch && set HARDHAT_RPC=http://127.0.0.1:8545 && python -m uvicorn main:app --port 8001"
+start "Frontend" cmd /k "cd frontend && python -m http.server 5500"
+start "Backend" cmd /k "cd backend && ..\venv\Scripts\activate && set CONTRACT_ADDRESS=0x5FbDB2315678afecb367f032d93F642f64180aa3 && set PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 && set JWT_SECRET=novacorp_diploma_2026_super_secret_key_32ch && set HARDHAT_RPC=http://127.0.0.1:8545 && python -m uvicorn main:app --port 8001"
 
 timeout /t 3 /nobreak >nul
 
